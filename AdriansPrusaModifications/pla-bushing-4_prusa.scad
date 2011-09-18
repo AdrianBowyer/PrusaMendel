@@ -7,9 +7,12 @@
 // http://www.reprap.org/wiki/Prusa_Mendel
 // http://github.com/prusajr/PrusaMendel
 
+
 // Print them in PLA and glue them to place
 // if they are too tight, define bigger rodsize
 // or you can try to sand a bt off
+
+
 
 
 // TYPE Can generate three versions
@@ -17,15 +20,25 @@
 // 2 - helical ones
 // 3 - holders for brass or any other bought bushings
 
-// Modified by Adrian to put 4 on a raft - they print better, and you don't want 12 at once as
-// that makes arranging the STLs on the bed more complicated.  23 May 2011
+
+
 
 include <configuration.scad>
+
+
+/**
+ * @id bushing
+ * @name Bushing
+ * @category Printed
+ */
+
 
 rodsize = bushing_rodsize;
 outerDiameter = bushing_outerDiameter;
 lenght = bushing_lenght;
 type = bushing_type;
+
+
 
 
 module bushing_core_straight(){
@@ -42,6 +55,7 @@ union(){
 				translate(v=[0,0,-1]) cylinder(h = lenght+2, r=(outerDiameter/2)-2);
 			}
 
+
 			//nipples inside touching the rod
 			difference(){
 				union(){
@@ -53,7 +67,8 @@ union(){
 		}
 		//opening cutout
 		translate(v=[(outerDiameter/2)+1,(outerDiameter/2)+1,(lenght)/2]) cube(size = [outerDiameter,outerDiameter,lenght+2], center = true);
-		
+
+
 		}
 	}
 }
@@ -73,10 +88,12 @@ union(){
 		}
 		//opening cutout
 		translate(v=[(outerDiameter/2)+1,(outerDiameter/2)+1,(lenght)/2]) cube(size = [outerDiameter,outerDiameter,lenght+2], center = true);
-		
+
+
 		}
 	}
 }
+
 
 module bushing_core_helical(){
 	difference(){
@@ -86,6 +103,7 @@ module bushing_core_helical(){
 		translate(v=[0,0,-0.5]) cylinder(h = 1, r=rodsize/2+1, $fn=20);
 	}
 }
+
 
 module bushing(){
 	difference(){
@@ -102,25 +120,18 @@ module bushing(){
 		bushing_core_holder();
 	}
 }
-
-// A single bushing.
-
-// bushing();
-
-
-// Four bushings on a break-away tab.  Makes them stick to
-// the print bed better.
-
-union()
-{
-	for(x=[0:1])
-		translate([19*x,0,0])
-		{
-			rotate([0,0,180])
-			bushing();
-			translate([0,20,0])
-			bushing();
-		}
-	translate([-10,-7,0])
-	cube([38,34,0.4]);
+union(){
+translate(v=[(rodsize+1),(rodsize+1),0]) bushing();
+translate(v=[-(rodsize+1),(rodsize+1),0]) bushing();
+translate(v=[(rodsize+1),-(rodsize+1),0]) mirror([ 0, 1, 0 ]) bushing();
+translate(v=[-(rodsize+1),-(rodsize+1),0]) mirror([ 0, 1, 0 ]) bushing();
+translate(v=[3*(rodsize+1),(rodsize+1),0]) bushing();
+translate(v=[-3*(rodsize+1),(rodsize+1),0]) bushing();
+translate(v=[3*(rodsize+1),-(rodsize+1),0]) mirror([ 0, 1, 0 ]) bushing();
+translate(v=[-3*(rodsize+1),-(rodsize+1),0]) mirror([ 0, 1, 0 ]) bushing();
+translate(v=[(rodsize+1),3*(rodsize+1),0]) bushing();
+translate(v=[-(rodsize+1),3*(rodsize+1),0]) bushing();
+translate(v=[(rodsize+1),-3*(rodsize+1),0]) mirror([ 0, 1, 0 ]) bushing();
+translate(v=[-(rodsize+1),-3*(rodsize+1),0]) mirror([ 0, 1, 0 ]) bushing();
 }
+%cube([100,100,0.01],true);

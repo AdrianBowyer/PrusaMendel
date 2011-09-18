@@ -10,7 +10,7 @@
 
 // Modified by Adrian to include support for sub-min microswitches and to make PCB mounts too. 15 May 2011
 
-include <../configuration.scad>
+include <configuration.scad>
 
 /**
  *@name Endstop holder
